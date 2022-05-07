@@ -22,7 +22,7 @@ export default function Navbar() {
                 justifyContent="center"
                 alignItems="center">
                 <Grid item xs={12}  >
-                    <Typography textAlign='center' variant='h6' > Phone No Coding Challenge</Typography>
+                    <Typography textAlign='center' variant='h6' >Front-end-coding test</Typography>
 
                 </Grid>
             </Grid>

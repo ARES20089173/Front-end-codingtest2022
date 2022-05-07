@@ -1,133 +1,119 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
-import { Button } from '@mui/material';
 import Typography from '@mui/material/Typography';
+import MailIcon from '@mui/icons-material/Mail';
+import PhoneIcon from '@mui/icons-material/Phone';
+import database from './database.json'
 function MainContent() {
-    const [FileMessage, setFile] = useState(null);
-    const [ReplaceResult, setReplaceResult] = useState([]);
-    const showFile = (e) => {
-        e.preventDefault();
-        const reader = new FileReader();
-        reader.readAsText(e.target.files[0]);
-        reader.onload = (e) => {
-            const text = e.target.result.split(/\r\n|\n/);
-            setFile(text);
-
-        };
-    };
-    const readPhonenumber =
-        FileMessage ? FileMessage.map((number) =>
-            <li key={number.toString()}>{number.replace(/ /g, "")}</li>
-        ) : "You stil have not upload a file"
-    const setPhoneNumber = FileMessage ? FileMessage.map((number) => number.replace(/ /g, "")) : ""
-    const result =
-        ReplaceResult.map((number, index) => (
-            <li key={number.toString()}>All Possilble result for {FileMessage[index].replace(/ /g, "")} is:{number.map((number2) => <div key={number2.toString()}>{number2}</div>)}</li>
-        ))
-    const dict = {
-        "2": ["A", "B", "C"],
-        "3": ["D", "E", "F"],
-        "4": ["G", "H", "I"],
-        "5": ["J", "K", "L"],
-        "6": ["M", "N", "O"],
-        "7": ["P", "Q", "R", "S"],
-        "8": ["T", "U", "V"],
-        "9": ["W", "X", "Y", "Z"],
-    };
-    function ReplaceFunction(arr) {
-        var len = arr.length;
-        if (len >= 2) {
-            var len1 = arr[0].length;
-            var len2 = arr[1].length;
-            var lenBoth = len1 * len2;
-            var items = new Array(lenBoth);
-            var index = 0;
-            for (var i = 0; i < len1; i++) {
-                for (var j = 0; j < len2; j++) {
-                    items[index] = arr[0][i] + arr[1][j];
-                    index++;
-                }
-            }
-            var newArr = new Array(len - 1);
-            for (var d = 2; d < arr.length; d++) {
-                newArr[d - 1] = arr[d];
-            }
-            newArr[0] = items;
-            return ReplaceFunction(newArr);
-        } else {
-            return arr[0];
-        }
-    }
-
-
-    function replacePhoneNumber() {
-
-        if (setPhoneNumber) {
-            const allArr = []
-            for (var i = 0; i < setPhoneNumber.length; i++) {
-                var str = setPhoneNumber[i]
-                var newArr = []
-                for (var c = 0; c < str.length; c++) {
-                    if (dict[str.charAt(c)]) {
-                        newArr.push(dict[str.charAt(c)])
-                    }
-                    else if (dict[str.charAt(c)] === " ") {
-
-                    }
-                    else {
-                        newArr.push(["-"])
-                    }
-                }
-                allArr.push(ReplaceFunction(newArr))
-                setReplaceResult(allArr)
-
-            }
-            console.log(ReplaceResult)
-        }
-        else {
-            alert("Please upload a file first")
-        }
-
-    }
     return (
         <Box
             sx={{
-                display: 'flex',
                 flexDirection: 'column',
                 alignItems: 'center',
                 backgroundColor: '#F4F2F3',
-                height: '80vh',
                 width: '100%',
+                marginTop: '1%'
             }}
         >
             <Grid
-                container
-                direction="row"
-                height='80vh'
                 justifyContent="center"
                 alignItems="center"
             >
+                <Grid container textAlign='center' height='99%' backgroundColor='#94A7AE' direction="row" padding="1%" >
+                    <Grid item width='33%'>
+                        {database.top.map((Top, index) => (
+                            <Grid height='700px' key={index} >
+                                <Grid height='40%' borderBottom='1px solid black' backgroundColor='#ffffff' borderRadius='4% 4% 0 0'  >
+                                    <img src={Top.picture} alt="Avatar" style={{ border: '2px solid white', borderRadius: '50%', height: '30%', position: 'relative', top: '-10%' }} />
+                                    <Typography variant="h5" style={{ color: '#545454' }}>{Top.name.first} {Top.name.last}</Typography>
+                                    <Typography style={{ color: '#979797' }}>{Top.company}</Typography>
+                                    <Typography style={{ color: '#979797' }}>{Top.address}</Typography>
+                                    <button style={{ borderRadius: '50%', height: '40px', marginRight: '10px', marginTop: '10px', color: '#c9d5d8', border: "2px solid #c9d5d8" }} >
+                                        <PhoneIcon />
+                                    </button>
+                                    <button style={{ borderRadius: '50%', height: '40px', color: '#c9d5d8', border: "2px solid #c9d5d8" }} >
+                                        <MailIcon />
+                                    </button>
+                                </Grid>
+                                <Grid height='50%' backgroundColor='#f7fbfc' borderRadius='0 0 4% 4%' justifyContent="left" alignItems="left" padding='20px'>
 
-                <Grid item xs={12} md={4} textAlign='center' height='70%' border='1px solid black;' backgroundColor='#94A7AE'
-                >
-                    <Grid item xs={12} md={12} height='50%' justifyContent="center" alignItems="center"  >
-                        <Typography >HI This is MainContent, Select a file to start use this app</Typography>
-                        <br />
-                        <input type="file" onChange={showFile} style={{ marginLeft: '10vh' }} />
-                        <br />
-                        <Typography>{FileMessage ?"The phone number is :":'Phone number will show below'}<br />
-
-                            <Grid item xs={12} md={12} height='10%' backgroundColor='#C0A9BD' justifyContent="center" alignItems="center" overflow='scroll' overflow-y='hidden'>
-                                {readPhonenumber}
+                                    <Grid height='95%'>
+                                        <Typography style={{ color: '#979797', textAlign: 'left' }}>About</Typography>
+                                        <Typography style={{ color: '#545454', textAlign: 'left' }}>{Top.about}</Typography>
+                                    </Grid>
+                                    <Grid height='5%' >
+                                        <Typography style={{ color: '#979797', textAlign: 'right' }}>Registered on {Top.registered}</Typography>
+                                    </Grid>
+                                </Grid>
                             </Grid>
-                        </Typography>
-                        <Button variant='outlined' onClick={replacePhoneNumber}>Do replace Function</Button>
+                        )
+                        )
+                        }
                     </Grid>
 
-                    <Grid item xs={12} md={12} height='50%' backgroundColor='#64766A' justifyContent="center" alignItems="center" overflow='scroll' overflow-y='hidden'>
-                        {result}
+                    <Grid item width='33%' marginTop={(database.top.length * 680) + "px"} style={{ position: 'relative', left: "-20vh" }}>
+                        {database.middle.map((middle, index2) => (
+                            <Grid height='700px' key={index2} >
+                                <Grid height='40%' borderBottom='1px solid black' backgroundColor='#ffffff' borderRadius='4% 4% 0 0'  >
+                                    <img src={middle.picture} alt="Avatar" style={{ border: '2px solid white', borderRadius: '50%', height: '30%', position: 'relative', top: '-10%' }} />
+                                    <Typography variant="h5" style={{ color: '#545454' }}>{middle.name.first} {middle.name.last}</Typography>
+                                    <Typography style={{ color: '#979797' }}>{middle.company}</Typography>
+                                    <Typography style={{ color: '#979797' }}>{middle.address}</Typography>
+                                    <button style={{ borderRadius: '50%', height: '40px', marginRight: '10px', marginTop: '10px', color: '#c9d5d8', border: "2px solid #c9d5d8" }} >
+                                        <PhoneIcon />
+                                    </button>
+                                    <button style={{ borderRadius: '50%', height: '40px', color: '#c9d5d8', border: "2px solid #c9d5d8" }} >
+                                        <MailIcon />
+                                    </button>
+                                </Grid>
+                                <Grid height='50%' backgroundColor='#f7fbfc' borderRadius='0 0 4% 4%' justifyContent="left" alignItems="left" padding='20px'>
+
+                                    <Grid height='95%'>
+                                        <Typography style={{ color: '#979797', textAlign: 'left' }}>About</Typography>
+                                        <Typography style={{ color: '#545454', textAlign: 'left' }}>{middle.about}</Typography>
+                                    </Grid>
+                                    <Grid height='5%' >
+                                        <Typography style={{ color: '#979797', textAlign: 'right' }}>Registered on {middle.registered}</Typography>
+                                    </Grid>
+                                </Grid>
+                            </Grid>
+                        )
+                        )
+                        }
                     </Grid>
+
+                    <Grid item width='33%' marginTop={(database.middle.length * 680 + database.top.length * 680) + "px"} style={{ position: 'relative', left: "-40vh" }}>
+                        {database.bottom.map((bottom, index3) => (
+                            <Grid height='700px' key={index3} >
+                                <Grid height='40%' borderBottom='1px solid black' backgroundColor='#ffffff' borderRadius='4% 4% 0 0'  >
+                                    <img src={bottom.picture} alt="Avatar" style={{ border: '2px solid white', borderRadius: '50%', height: '30%', position: 'relative', top: '-10%' }} />
+                                    <Typography variant="h5" style={{ color: '#545454' }}>{bottom.name.first} {bottom.name.last}</Typography>
+                                    <Typography style={{ color: '#979797' }}>{bottom.company}</Typography>
+                                    <Typography style={{ color: '#979797' }}>{bottom.address}</Typography>
+                                    <button style={{ borderRadius: '50%', height: '40px', marginRight: '10px', marginTop: '10px', color: '#c9d5d8', border: "2px solid #c9d5d8" }} >
+                                        <PhoneIcon />
+                                    </button>
+                                    <button style={{ borderRadius: '50%', height: '40px', color: '#c9d5d8', border: "2px solid #c9d5d8" }} >
+                                        <MailIcon />
+                                    </button>
+                                </Grid>
+                                <Grid height='50%' backgroundColor='#f7fbfc' borderRadius='0 0 4% 4%' justifyContent="left" alignItems="left" padding='20px'>
+
+                                    <Grid height='95%'>
+                                        <Typography style={{ color: '#979797', textAlign: 'left' }}>About</Typography>
+                                        <Typography style={{ color: '#545454', textAlign: 'left' }}>{bottom.about}</Typography>
+                                    </Grid>
+                                    <Grid height='5%' >
+                                        <Typography style={{ color: '#979797', textAlign: 'right' }}>Registered on {bottom.registered}</Typography>
+                                    </Grid>
+                                </Grid>
+                            </Grid>
+                        )
+                        )
+                        }
+                    </Grid>
+
                 </Grid>
 
 
